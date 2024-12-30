@@ -1,107 +1,174 @@
-# Sistema de Gestión Veterinaria 🐾
+# VetCare Pro - Sistema de Gestión Veterinaria 🐾
 
-Aplicación de escritorio desarrollada en WPF (Windows Presentation Foundation) para la gestión integral de pacientes en clínicas veterinarias. Esta aplicación permite administrar eficientemente la información de mascotas, sus dueños y las consultas médicas.
+Sistema integral para la gestión de clínicas veterinarias desarrollado con tecnología WPF. Diseñado específicamente para optimizar el flujo de trabajo diario en consultorios veterinarios, permitiendo un seguimiento detallado de pacientes animales y facilitando la gestión administrativa.
 
-## Características Principales
+## 🌟 Características Principales
 
-- **Gestión de Pacientes**
-  - Registro completo de mascotas
-  - Historial médico detallado
-  - Seguimiento de vacunaciones
-  - Registro de tratamientos
+### Gestión de Pacientes Animales
+- Fichas médicas completas por especie (perros, gatos, aves, especies exóticas)
+- Registro de peso y signos vitales
+- Historial de vacunación con alertas automáticas
+- Registro fotográfico del paciente
+- Control de desparasitaciones
+- Historial de procedimientos quirúrgicos
 
-- **Gestión de Propietarios**
-  - Datos de contacto
-  - Historial de visitas
-  - Registro de pagos
+### Gestión de Propietarios
+- Datos personales y de contacto
+- Múltiples mascotas por propietario
+- Sistema de recordatorios por SMS/Email
+- Historial de pagos y facturas
+- Programa de fidelización
 
-- **Gestión de Citas**
-  - Calendario de consultas
-  - Recordatorios automáticos
-  - Estado de citas
+### Control de Citas y Consultas
+- Calendario interactivo por veterinario
+- Diferentes tipos de citas (consulta general, vacunación, cirugía, grooming)
+- Sistema de confirmación automática
+- Lista de espera inteligente
+- Duración personalizable de citas
 
-## Tecnologías Utilizadas
+### Inventario y Farmacia
+- Control de medicamentos y vacunas
+- Alertas de stock bajo
+- Registro de lotes y fechas de vencimiento
+- Gestión de proveedores
+- Recetas electrónicas
 
-- **Frontend**: WPF (Windows Presentation Foundation)
-- **Backend**: C#
-- **Base de Datos**: SQLite
-- **.NET Framework**: [Especificar versión]
+## 💻 Tecnologías Utilizadas
 
-## Requisitos del Sistema
+- **Frontend**: WPF con Material Design
+- **Backend**: C# .NET 6
+- **Base de Datos**: SQLite 3.36.0
+- **Reportes**: Crystal Reports
+- **Notificaciones**: SendGrid para emails
 
-- Windows 7 o superior
-- .NET Framework [versión]
-- Mínimo 4GB de RAM
-- 100MB de espacio en disco duro
+## 📋 Requisitos del Sistema
 
-## Instalación
+- Windows 10 o superior
+- .NET 6.0 Runtime
+- Mínimo 8GB de RAM recomendado
+- 500MB de espacio libre en disco
+- Resolución mínima: 1366 x 768
 
-1. Descarga el instalador desde la sección de releases
-2. Ejecuta el archivo .exe
-3. Sigue las instrucciones del asistente de instalación
-4. La base de datos se creará automáticamente en la primera ejecución
+## 🚀 Instalación
 
-## Configuración de la Base de Datos
+1. **Preparación**
+   ```powershell
+   # Crear directorio de instalación
+   mkdir C:\VetCarePro
+   ```
 
-La aplicación utiliza SQLite como sistema de gestión de base de datos. La base de datos se crea automáticamente en:
+2. **Base de Datos**
+   ```sql
+   -- La base de datos se inicializará con:
+   -- Catálogo de especies y razas
+   -- Lista de vacunas comunes
+   -- Procedimientos veterinarios estándar
+   -- Productos y medicamentos básicos
+   ```
+
+3. **Primer Inicio**
+   - Configura los datos de tu clínica
+   - Crea usuarios y asigna roles
+   - Personaliza los horarios de atención
+
+## 📱 Módulos Principales
+
+### 1. Recepción
+- Check-in de pacientes
+- Gestión de sala de espera
+- Cobros y facturación
+- Agenda de citas
+
+### 2. Consulta Veterinaria
+- Historia clínica digital
+- Plantillas de examen físico
+- Recetario electrónico
+- Órdenes de laboratorio
+
+### 3. Hospitalización
+- Control de pacientes internados
+- Registro de tratamientos y evolución
+- Monitoreo de signos vitales
+- Gestión de jaulas/kennels
+
+### 4. Administración
+- Reportes financieros
+- Estadísticas de atención
+- Gestión de personal
+- Control de inventario
+
+## 📁 Estructura de Carpetas
 
 ```
-C:\Users\[Usuario]\AppData\Local\VeterinaryApp\database.db
+VetCarePro/
+│
+├── Modules/
+│   ├── Reception/
+│   ├── Consultation/
+│   ├── Pharmacy/
+│   └── Admin/
+│
+├── Database/
+│   ├── Scripts/
+│   └── Backup/
+│
+├── Resources/
+│   ├── Images/
+│   └── Reports/
+│
+└── Documentation/
+    ├── UserManual/
+    └── Training/
 ```
 
-## Uso
+## 🤝 Soporte y Contacto
 
-1. Inicia la aplicación desde el acceso directo creado en el escritorio
-2. Accede con tus credenciales de usuario
-3. Navega por el menú principal para acceder a las diferentes funcionalidades
+- **Soporte Técnico**: soporte@vetcarepro.com
+- **WhatsApp**: +1234567890
+- **Horario**: Lunes a Viernes 9:00 - 18:00
 
-## Estructura del Proyecto
+## 📖 Wiki y Documentación
 
-```
-VeterinaryApp/
-│
-├── Models/
-│   ├── Patient.cs
-│   ├── Owner.cs
-│   └── Appointment.cs
-│
-├── Views/
-│   ├── MainWindow.xaml
-│   ├── PatientView.xaml
-│   └── AppointmentView.xaml
-│
-├── ViewModels/
-│   ├── PatientViewModel.cs
-│   └── AppointmentViewModel.cs
-│
-└── Services/
-    ├── DatabaseService.cs
-    └── PrintService.cs
-```
+Visita nuestra [Wiki](link-a-tu-wiki) para encontrar:
+- Guías de usuario
+- Videos tutoriales
+- Preguntas frecuentes
+- Mejores prácticas
 
-## Contribución
+## 🔄 Actualizaciones
 
-Si deseas contribuir al proyecto:
+El sistema se actualiza automáticamente para incluir:
+- Nuevas funcionalidades
+- Mejoras de seguridad
+- Actualizaciones de catálogos veterinarios
+- Optimizaciones de rendimiento
 
-1. Haz un Fork del repositorio
-2. Crea una nueva rama (`git checkout -b feature/AmazingFeature`)
-3. Realiza tus cambios
-4. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
-5. Push a la rama (`git push origin feature/AmazingFeature`)
-6. Abre un Pull Request
+## 🔒 Seguridad y Privacidad
 
-## Licencia
+- Cifrado de datos sensibles
+- Copias de seguridad automáticas
+- Cumplimiento con regulaciones veterinarias
+- Registro de auditoría de acciones
 
-Este proyecto está bajo la licencia [especificar licencia].
+## 📊 Reportes Disponibles
 
-## Contacto
+- Estadísticas de atención
+- Ingresos y egresos
+- Inventario y medicamentos
+- Vacunaciones pendientes
+- Cirugías programadas
 
-[Tu Nombre] - [tu@email.com]
+## 🎓 Capacitación
 
-Link del proyecto: [https://github.com/username/repo]
+Ofrecemos:
+- Manual de usuario detallado
+- Videos tutoriales
+- Sesiones de capacitación en línea
+- Soporte técnico personalizado
 
-## Agradecimientos
+## ⚖️ Licencia
 
-- [Biblioteca/Recurso 1]
-- [Biblioteca/Recurso 2]
-- [Biblioteca/Recurso 3]
+Este software está protegido bajo licencia propietaria. Todos los derechos reservados.
+
+---
+Desarrollado con ❤️ para la comunidad veterinaria
