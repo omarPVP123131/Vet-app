@@ -1,0 +1,109 @@
+﻿<Page x:Class="VeterinaryManagementSystem.Views.SettingsWindow"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+Background="#F4F4F4">
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+
+        <TabControl Margin="-17,20,37,0" Grid.RowSpan="3" Height="708" VerticalAlignment="Top">
+            <TabItem Header="Cuenta de Usuario">
+                <Grid Margin="20">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <!-- Foto de perfil -->
+                        <RowDefinition Height="Auto"/>
+                        <!-- Información de usuario -->
+                        <RowDefinition Height="Auto"/>
+                        <!-- Configuración adicional -->
+                        <RowDefinition Height="Auto"/>
+                        <!-- Botón -->
+                    </Grid.RowDefinitions>
+
+                    <!-- Foto de Perfil -->
+                    <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="0,0,0,20">
+                        <Border BorderBrush="#D1D1D1" BorderThickness="1" Width="100" Height="100" CornerRadius="50" Margin="0,0,20,0">
+                            <Image x:Name="ProfileImage" Stretch="UniformToFill" Width="100" Height="100"/>
+                        </Border>
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Text="Foto de Perfil:" FontSize="14" FontWeight="Bold" Margin="0,0,0,10"/>
+                            <Button Content="Seleccionar Imagen" Width="150" Padding="10,5" Click="SelectImageButton_Click"
+                                    BorderBrush="#4CAF50" BorderThickness="1" Background="#4CAF50" Foreground="White" FontSize="14"/>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <!-- Información Personal -->
+                    <StackPanel Grid.Row="1" Margin="0,0,0,20">
+                        <TextBlock Text="Cambiar Contraseña:" Margin="0,10" FontWeight="Bold" FontSize="14"/>
+                        <PasswordBox x:Name="ChangePasswordBox" Width="300" Margin="0,5"/>
+
+                        <TextBlock Text="Cambiar Correo Electrónico:" Margin="20,10,0,5" FontSize="14"/>
+                        <TextBox x:Name="ChangeEmailTextBox" Width="300" Margin="0,5"/>
+
+                        <TextBlock Text="Información Personal:" Margin="20,10" FontWeight="Bold" FontSize="14"/>
+                        <TextBox x:Name="NameTextBox" Width="300" Margin="0,5"/>
+
+                        <TextBlock Text="Dirección:" Margin="20,10" FontSize="14"/>
+                        <TextBox x:Name="AddressTextBox" Width="300" Margin="0,5"/>
+
+                        <TextBlock Text="Teléfono:" Margin="20,10" FontSize="14"/>
+                        <TextBox x:Name="PhoneTextBox" Width="300" Margin="0,5"/>
+                    </StackPanel>
+
+                    <!-- Configuración adicional -->
+                    <StackPanel Grid.Row="2" Margin="0,0,0,20">
+                        <TextBlock Text="Notificaciones:" Margin="20,10" FontSize="14"/>
+                        <CheckBox x:Name="NotificationsCheckBox" Content="Habilitar Notificaciones" Margin="0,5"/>
+                        <Button Content="Guardar Configuración" Click="SaveSettingsButton_Click" Height="32" Width="687"/>
+                    </StackPanel>
+
+                </Grid>
+
+            </TabItem>
+
+            <TabItem Header="Preferencias de Sistema">
+                <StackPanel Margin="20">
+                    <TextBlock Text="Conexión a la Base de Datos:" FontSize="14" FontWeight="Bold" Margin="0,10"/>
+                    <TextBox x:Name="DatabaseConnectionTextBox" Width="300" Margin="0,5" BorderBrush="#D1D1D1" BorderThickness="1"/>
+
+                    <Button Content="Hacer Backup" Width="150" Margin="0,10" 
+                            BorderBrush="#4CAF50" BorderThickness="1" Background="#4CAF50" 
+                            Foreground="White" FontSize="14" Click="BackupButton_Click"/>
+
+                    <Button Content="Restaurar Backup" Width="150" Margin="0,10"
+                            BorderBrush="#FF5722" BorderThickness="1" Background="#FF5722" 
+                            Foreground="White" FontSize="14" Click="RestoreButton_Click"/>
+                </StackPanel>
+            </TabItem>
+
+
+
+            <!-- Tab: Impresoras -->
+            <TabItem Header="Impresoras">
+                <StackPanel Margin="20">
+                    <TextBlock Text="Seleccionar Impresora:" FontSize="14" FontWeight="Bold" Margin="0,10"/>
+                    <ComboBox x:Name="PrinterComboBox" Width="300" Margin="0,5" BorderBrush="#D1D1D1" BorderThickness="1"/>
+
+                    <Button Content="Probar Impresora" Width="150" Margin="0,10" 
+                            BorderBrush="#4CAF50" BorderThickness="1" Background="#4CAF50" 
+                            Foreground="White" FontSize="14" Click="TestPrinterButton_Click"/>
+                </StackPanel>
+            </TabItem>
+
+        <TabItem Header="Backup">
+                <StackPanel Margin="20">
+                    <Button Content="Hacer Backup" Click="BackupButton_Click"/>
+                    <Button Content="Restaurar Backup" Click="RestoreButton_Click"/>
+                    <ProgressBar x:Name="ProgressBar" Minimum="0" Maximum="100" Visibility="Collapsed" Height="20" Margin="0,10"/>
+                </StackPanel>
+            </TabItem>
+        </TabControl>
+
+    </Grid>
+</Page>

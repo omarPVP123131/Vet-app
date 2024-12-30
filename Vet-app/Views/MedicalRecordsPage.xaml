@@ -1,0 +1,9 @@
+<Page x:Class="VeterinaryManagementSystem.Views.MedicalRecordsPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      Title="Medical Records">
+    <Grid>
+        <TextBlock Text="Medical Records" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+    </Grid>
+</Page>
+
