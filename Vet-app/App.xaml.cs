@@ -5,6 +5,7 @@ using VeterinaryManagementSystem.Services;
 using VeterinaryManagementSystem.ViewModels;
 using VeterinaryManagementSystem.Views;
 using VeterinaryManagementSystem.Helpers;
+using VeterinaryManagementSystem.Config;
 
 namespace VeterinaryManagementSystem
 {
@@ -23,22 +24,20 @@ namespace VeterinaryManagementSystem
 
         private void InitializeDatabase()
         {
-            // Ruta correcta para la base de datos SQLite
-            var dbPath = "VeterinaryDb.db"; // Asegúrate de que el archivo .db esté en el directorio correcto
-
-            // Crea una instancia de la clase DatabaseHelper
-            var dbHelper = new DatabaseHelper(dbPath);
-
-            // Llamamos al método para crear la base de datos y las tablas
+            // Usar la conexión centralizada de DatabaseConfig
+            var dbHelper = new DatabaseHelper(DatabaseConfig.ConnectionString);
             dbHelper.InitializeDatabase();
         }
 
         private void ConfigureServices(ServiceCollection services)
         {
-            // Registrar el servicio de autenticación con la base de datos SQLite
-            services.AddSingleton<IAuthenticationService>(sp => new AuthenticationService("VeterinaryDb.db"));
+            // Registrar DatabaseHelper con la conexión centralizada
+            services.AddSingleton(sp => new DatabaseHelper(DatabaseConfig.ConnectionString));
 
-            // Registrar otros servicios
+            // Registrar servicios
+            services.AddSingleton<IAuthenticationService>(sp =>
+                new AuthenticationService(DatabaseConfig.ConnectionString));
+
             services.AddSingleton<INavigationService, NavigationService>();
 
             // Registrar ViewModels
@@ -50,11 +49,11 @@ namespace VeterinaryManagementSystem
             services.AddTransient<MainWindow>();
         }
 
+
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
 
-            // Obtener la ventana de login con DI
             var loginWindow = serviceProvider.GetRequiredService<LoginWindow>();
             loginWindow.Show();
             Current.MainWindow = loginWindow;

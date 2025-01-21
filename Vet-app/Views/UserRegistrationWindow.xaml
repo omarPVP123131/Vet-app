@@ -44,9 +44,6 @@
         <!-- Imagen de perfil -->
         <TextBlock Text="Foto de perfil:" Grid.ColumnSpan="2" Margin="10,5,385,-39" Grid.Row="7"/>
         <Image x:Name="ProfileImage" Grid.Row="6" Height="100" Margin="0,2,2,3" >
-            <Image.OpacityMask>
-                <ImageBrush ImageSource="/Views/avatar.png"/>
-            </Image.OpacityMask>
         </Image>
         <Button Grid.Row="7" Content="Seleccionar imagen" Padding="10" FontSize="9" HorizontalAlignment="Center" Click="SelectImageButton_Click" Margin="0,40,0,-72" Width="106"/>
 

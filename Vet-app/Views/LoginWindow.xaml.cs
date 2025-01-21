@@ -5,25 +5,23 @@ using VeterinaryManagementSystem.Services;
 
 namespace VeterinaryManagementSystem.Views
 {
-
     public partial class LoginWindow : Window
     {
         public LoginWindow(LoginViewModel viewModel)
         {
             InitializeComponent();
-            DataContext = viewModel;
+            this.DataContext = viewModel;
 
             // Focus en el campo de usuario al iniciar
             Loaded += (s, e) => NameTextBox.Focus();
 
-            // Enable window dragging
+            // Habilitar arrastre de la ventana
             this.MouseDown += (s, e) =>
             {
                 if (e.LeftButton == MouseButtonState.Pressed)
                     this.DragMove();
             };
         }
-
 
         private void OpenRegistrationButton_Click(object sender, RoutedEventArgs e)
         {

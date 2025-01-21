@@ -91,7 +91,7 @@
                         <ToggleButton x:Name="MenuToggleButton" 
                                       Style="{StaticResource MaterialDesignIconButton}"
                                       Height="40" Width="40"
-                                      Foreground="White">
+                                      Foreground="White" IsChecked="True">
                             <materialDesign:PackIcon Kind="Menu" Width="24" Height="24" IsTabStop="False"/>
                         </ToggleButton>
                         <TextBlock Text="Sistema de Gestión Veterinaria" 
@@ -129,21 +129,21 @@
 
                         <!-- Botones de control de ventana -->
                         <Button Style="{StaticResource MaterialDesignIconButton}"
-            Height="30" Width="30" Margin="5"
-            Click="MinimizeWindow_Click"
-            ToolTip="Minimizar">
+                                Height="30" Width="30" Margin="5"
+                                Click="MinimizeWindow_Click"
+                                ToolTip="Minimizar">
                             <materialDesign:PackIcon Kind="WindowMinimize" Foreground="White"/>
                         </Button>
                         <Button Style="{StaticResource MaterialDesignIconButton}"
-            Height="30" Width="30" Margin="5"
-            Click="MaximizeWindow_Click"
-            ToolTip="Maximizar">
+                                Height="30" Width="30" Margin="5"
+                                Click="MaximizeWindow_Click"
+                                ToolTip="Maximizar">
                             <materialDesign:PackIcon Kind="WindowMaximize" Foreground="White"/>
                         </Button>
                         <Button Style="{StaticResource MaterialDesignIconButton}"
-            Height="30" Width="30" Margin="5"
-            Click="CloseWindow_Click"
-            ToolTip="Cerrar">
+                                Height="30" Width="30" Margin="5"
+                                Click="CloseWindow_Click"
+                                ToolTip="Cerrar">
                             <materialDesign:PackIcon Kind="Close" Foreground="White"/>
                         </Button>
                     </StackPanel>
@@ -161,7 +161,7 @@
                         </Grid.RowDefinitions>
 
                         <!-- Encabezado del menú -->
-                        <Grid Grid.Row="0" Height="160">
+                        <Grid Grid.Row="0">
                             <Grid.Background>
                                 <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                                     <GradientStop Color="#2c3e50" Offset="0"/>
@@ -172,154 +172,305 @@
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="20">
                                 <Ellipse Width="60" Height="60">
                                     <Ellipse.Fill>
-                                        <ImageBrush ImageSource="/Assets/avatar.png" 
-                           Stretch="UniformToFill"/>
+                                        <ImageBrush ImageSource="/Assets/avatar.png" Stretch="UniformToFill"/>
                                     </Ellipse.Fill>
-                                    <Ellipse.Effect>
-                                        <DropShadowEffect ShadowDepth="2" 
-                                 Opacity="0.3" 
-                                 BlurRadius="5"/>
-                                    </Ellipse.Effect>
                                 </Ellipse>
-                                <StackPanel Margin="20,0,0,0">
+                                <StackPanel Margin="15,0,0,0">
                                     <TextBlock Text="Dr. Juan Pérez" 
-                       Foreground="White" 
-                       FontSize="16" 
-                       FontWeight="SemiBold" 
-                       Margin="0,10,0,0"/>
+                                             Foreground="White" 
+                                             FontSize="16" 
+                                             FontWeight="SemiBold"/>
                                     <TextBlock Text="Veterinario Principal" 
-                       Foreground="#CCFFFFFF" 
-                       FontSize="12"/>
+                                             Foreground="#CCFFFFFF" 
+                                             FontSize="12"/>
+                                    <TextBlock Text="Online" 
+                                             Foreground="#4CAF50" 
+                                             FontSize="11"/>
                                 </StackPanel>
                             </StackPanel>
                         </Grid>
 
-
-                        <!-- Menú de navegación mejorado -->
+                        <!-- ScrollViewer con un único hijo -->
                         <ScrollViewer Grid.Row="1" 
-                                      VerticalScrollBarVisibility="Auto" 
-                                      HorizontalScrollBarVisibility="Disabled">
+                                    VerticalScrollBarVisibility="Auto" 
+                                    HorizontalScrollBarVisibility="Disabled">
                             <StackPanel Margin="0,10">
-                                <Button Style="{StaticResource ModernMenuButton}" Click="NavigateToDashboard">
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto"/>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="Auto"/>
-                                        </Grid.ColumnDefinitions>
 
-                                        <materialDesign:PackIcon Kind="ViewDashboard" 
-                                                                 Grid.Column="0"
-                                                                 Width="24" Height="24"/>
-                                        <TextBlock Text="Dashboard" 
-                                                   Grid.Column="1"
-                                                   Margin="15,0,0,0"/>
-                                        <Border Grid.Column="2" 
-                                                Background="#e74c3c" 
-                                                CornerRadius="12"
-                                                MinWidth="24"
-                                                Height="24"
-                                                Visibility="{Binding HasNotifications}">
-                                            <TextBlock Text="5" 
-                                                       Foreground="White"
-                                                       HorizontalAlignment="Center"
-                                                       VerticalAlignment="Center"/>
-                                        </Border>
-                                    </Grid>
-                                </Button>
+                                <!-- Dashboard -->
+                                    <Button Style="{StaticResource ModernMenuButton}" 
+                                            Click="NavigateToDashboard"
+                                            x:Name="DashboardButton">
+                                        <DockPanel LastChildFill="True">
+                                            <materialDesign:PackIcon Kind="ViewDashboard" 
+                                                                     Width="24" Height="24"/>
+                                            <TextBlock Text="Dashboard" 
+                                                       Margin="15,0,0,0"/>
+                                            <Border Background="#e74c3c" 
+                                                    CornerRadius="12"
+                                                    MinWidth="24"
+                                                    Height="24"
+                                                    Margin="10,0,0,0"
+                                                    HorizontalAlignment="Right"
+                                                    Visibility="{Binding HasNotifications}">
+                                                <TextBlock Text="5" 
+                                                           Foreground="White"
+                                                           HorizontalAlignment="Center"
+                                                           VerticalAlignment="Center"/>
+                                            </Border>
+                                        </DockPanel>
+                                    </Button>
 
-                                <!-- Botón para Pacientes -->
-                                <Button Style="{StaticResource ModernMenuButton}" Click="NavigateToPatients">
-                                    <StackPanel Orientation="Horizontal">
-                                        <materialDesign:PackIcon Kind="Account" Width="24" Height="24"/>
-                                        <TextBlock Text="Pacientes" Margin="15,0,0,0"/>
+                                    <!-- Sección Ventas -->
+                                    <StackPanel Margin="0,15,0,0">
+                                        <TextBlock Text="VENTAS" 
+                                                   Margin="15,5" 
+                                                   FontWeight="Bold" 
+                                                   Foreground="#666"
+                                                   FontSize="12"/>
+
+                                    <Button Style="{StaticResource ModernMenuButton}" 
+                                                Click="NavigateToPointOfSale">
+                                        <DockPanel>
+                                            <materialDesign:PackIcon Kind="CashRegister" 
+                                                                         Width="24" Height="24"/>
+                                            <TextBlock Text="Punto de Venta" 
+                                                           Margin="15,0,0,0"/>
+                                        </DockPanel>
+                                    </Button>
+                                </StackPanel>
+
+                                    <!-- Sección Inventario -->
+                                    <StackPanel Margin="0,15,0,0">
+                                        <TextBlock Text="INVENTARIO" 
+                                                   Margin="15,5" 
+                                                   FontWeight="Bold" 
+                                                   Foreground="#666"
+                                                   FontSize="12"/>
+
+                                     
+
+                                        <Button Style="{StaticResource ModernMenuButton}" 
+                                                Click="NavigateToInventory">
+                                            <DockPanel>
+                                                <materialDesign:PackIcon Kind="Archive" 
+                                                                         Width="24" Height="24"/>
+                                                <TextBlock Text="Inventario" 
+                                                           Margin="15,0,0,0"/>
+                                                <Border Background="#FF9800" 
+                                                        CornerRadius="12"
+                                                        MinWidth="24"
+                                                        Height="24"
+                                                        Margin="10,0,0,0"
+                                                        HorizontalAlignment="Right">
+                                                    <TextBlock Text="8" 
+                                                               Foreground="White"
+                                                               HorizontalAlignment="Center"
+                                                               VerticalAlignment="Center"/>
+                                                </Border>
+                                            </DockPanel>
+                                        </Button>
+                                    <Button Style="{StaticResource ModernMenuButton}" 
+          Click="NavigateToProviders">
+                                        <DockPanel>
+                                            <materialDesign:PackIcon Kind="Person" 
+                                   Width="24" Height="24"/>
+                                            <TextBlock Text="Proveedores" 
+                     Margin="15,0,0,0"/>
+                                            <Border Background="#FF9800" 
+                  CornerRadius="12"
+                  MinWidth="24"
+                  Height="24"
+                  Margin="10,0,0,0"
+                  HorizontalAlignment="Right">
+                                                <TextBlock Text="8" 
+                         Foreground="White"
+                         HorizontalAlignment="Center"
+                         VerticalAlignment="Center"/>
+                                            </Border>
+                                        </DockPanel>
+                                    </Button>
+                                    <Button Style="{StaticResource ModernMenuButton}" 
+Click="NavigateToClients">
+                                        <DockPanel>
+                                            <materialDesign:PackIcon Kind="Person" 
+                         Width="24" Height="24"/>
+                                            <TextBlock Text="Clientes" 
+           Margin="15,0,0,0"/>
+                                            <Border Background="#FF9800" 
+        CornerRadius="12"
+        MinWidth="24"
+        Height="24"
+        Margin="10,0,0,0"
+        HorizontalAlignment="Right">
+                                                <TextBlock Text="8" 
+               Foreground="White"
+               HorizontalAlignment="Center"
+               VerticalAlignment="Center"/>
+                                            </Border>
+                                        </DockPanel>
+                                    </Button>
+                                </StackPanel>
+
+                                    <!-- Sección Veterinaria 
+                                    <StackPanel Margin="0,15,0,0">
+                                        <TextBlock Text="VETERINARIA" 
+                                                   Margin="15,5" 
+                                                   FontWeight="Bold" 
+                                                   Foreground="#666"
+                                                   FontSize="12"/>
+
+                                        <Button Style="{StaticResource ModernMenuButton}" 
+                                                Click="NavigateToPatients">
+                                            <DockPanel>
+                                                <materialDesign:PackIcon Kind="Paw" 
+                                                                         Width="24" Height="24"/>
+                                                <TextBlock Text="Pacientes" 
+                                                           Margin="15,0,0,0"/>
+                                            </DockPanel>
+                                        </Button>
+
+                                        <Button Style="{StaticResource ModernMenuButton}" 
+                                                Click="NavigateToAppointments">
+                                            <DockPanel>
+                                                <materialDesign:PackIcon Kind="Calendar" 
+                                                                         Width="24" Height="24"/>
+                                                <TextBlock Text="Citas" 
+                                                           Margin="15,0,0,0"/>
+                                                <Border Background="#4CAF50" 
+                                                        CornerRadius="12"
+                                                        MinWidth="24"
+                                                        Height="24"
+                                                        Margin="10,0,0,0"
+                                                        HorizontalAlignment="Right">
+                                                    <TextBlock Text="3" 
+                                                               Foreground="White"
+                                                               HorizontalAlignment="Center"
+                                                               VerticalAlignment="Center"/>
+                                                </Border>
+                                            </DockPanel>
+                                        </Button>
+
+                                        <Button Style="{StaticResource ModernMenuButton}" 
+                                                Click="NavigateToMedicalRecords">
+                                            <DockPanel>
+                                                <materialDesign:PackIcon Kind="FileDocument" 
+                                                                         Width="24" Height="24"/>
+                                                <TextBlock Text="Historial Médico" 
+                                                           Margin="15,0,0,0"/>
+                                            </DockPanel>
+                                        </Button>
                                     </StackPanel>
-                                </Button>
 
-                                <!-- Botón para Citas -->
-                                <Button Style="{StaticResource ModernMenuButton}" Click="NavigateToAppointments">
-                                    <StackPanel Orientation="Horizontal">
-                                        <materialDesign:PackIcon Kind="Calendar" Width="24" Height="24"/>
-                                        <TextBlock Text="Citas" Margin="15,0,0,0"/>
-                                    </StackPanel>
-                                </Button>
+                                -->
+                                
+                                    <!-- Sección Administración 
+                                    <StackPanel Margin="0,15,0,0">
+                                        <TextBlock Text="ADMINISTRACIÓN" 
+                                                   Margin="15,5" 
+                                                   FontWeight="Bold" 
+                                                   Foreground="#666"
+                                                   FontSize="12"/>
 
-                                <!-- Botón para Inventario -->
-                                <Button Style="{StaticResource ModernMenuButton}" Click="NavigateToInventory">
-                                    <StackPanel Orientation="Horizontal">
-                                        <materialDesign:PackIcon Kind="Package" Width="24" Height="24"/>
-                                        <TextBlock Text="Inventario" Margin="15,0,0,0"/>
-                                    </StackPanel>
-                                </Button>
+                                        <Button Style="{StaticResource ModernMenuButton}" 
+                                                Click="NavigateToClients">
+                                            <DockPanel>
+                                                <materialDesign:PackIcon Kind="AccountMultiple" 
+                                                                         Width="24" Height="24"/>
+                                                <TextBlock Text="Clientes" 
+                                                           Margin="15,0,0,0"/>
+                                            </DockPanel>
+                                        </Button>
 
-                                <!-- Botón para Historial Médico -->
-                                <Button Style="{StaticResource ModernMenuButton}" Click="NavigateToMedicalRecords">
-                                    <StackPanel Orientation="Horizontal">
-                                        <materialDesign:PackIcon Kind="Clipboard" Width="24" Height="24"/>
-                                        <TextBlock Text="Historial Médico" Margin="15,0,0,0"/>
-                                    </StackPanel>
-                                </Button>
+                                        <Button Style="{StaticResource ModernMenuButton}" 
+                                                Click="NavigateToProviders">
+                                            <DockPanel>
+                                                <materialDesign:PackIcon Kind="TruckDelivery" 
+                                                                         Width="24" Height="24"/>
+                                                <TextBlock Text="Proveedores" 
+                                                           Margin="15,0,0,0"/>
+                                            </DockPanel>
+                                        </Button>
 
-                                <!-- Botón para Facturación -->
-                                <Button Style="{StaticResource ModernMenuButton}" Click="NavigateToBilling">
-                                    <StackPanel Orientation="Horizontal">
-                                        <materialDesign:PackIcon Kind="CreditCard" Width="24" Height="24"/>
-                                        <TextBlock Text="Facturación" Margin="15,0,0,0"/>
+                                        <Button Style="{StaticResource ModernMenuButton}" 
+                                                Click="NavigateToReports">
+                                            <DockPanel>
+                                                <materialDesign:PackIcon Kind="ChartLine" 
+                                                                         Width="24" Height="24"/>
+                                                <TextBlock Text="Reportes" 
+                                                           Margin="15,0,0,0"/>
+                                            </DockPanel>
+                                        </Button>
                                     </StackPanel>
-                                </Button>
 
-                                <!-- Botón para Vacunación -->
-                                <Button Style="{StaticResource ModernMenuButton}" Click="NavigateToVaccination">
-                                    <StackPanel Orientation="Horizontal">
-                                        <materialDesign:PackIcon Kind="MedicalBag" Width="24" Height="24"/>
-                                        <TextBlock Text="Vacunación" Margin="15,0,0,0"/>
-                                    </StackPanel>
-                                </Button>
+                                -->
+                                
+                                    <!-- Sección Configuración -->
+                                    <StackPanel Margin="0,15,0,0">
+                                        <TextBlock Text="CONFIGURACIÓN" 
+                                                   Margin="15,5" 
+                                                   FontWeight="Bold" 
+                                                   Foreground="#666"
+                                                   FontSize="12"/>
 
-                                <!-- Botón para Comunicación -->
-                                <Button Style="{StaticResource ModernMenuButton}" Click="NavigateToCommunication">
-                                    <StackPanel Orientation="Horizontal">
-                                        <materialDesign:PackIcon Kind="Message" Width="24" Height="24"/>
-                                        <TextBlock Text="Comunicación" Margin="15,0,0,0"/>
-                                    </StackPanel>
-                                </Button>
+                                        <Button Style="{StaticResource ModernMenuButton}" 
+                                                Click="NavigateToConfig">
+                                            <DockPanel>
+                                                <materialDesign:PackIcon Kind="Cog" 
+                                                                         Width="24" Height="24"/>
+                                                <TextBlock Text="Ajustes" 
+                                                           Margin="15,0,0,0"/>
+                                            </DockPanel>
+                                        </Button>
+
+                                   
+                                </StackPanel>
+
                             </StackPanel>
                         </ScrollViewer>
 
                         <!-- Pie del menú -->
-                        <Grid Grid.Row="2" Background="#1a2634" Height="60">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
+                                <Grid Grid.Row="2" Background="#1a2634" Height="60">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
 
-                            <Button Style="{StaticResource MaterialDesignIconButton}" 
-                                    Click="NavigateToConfig"
-            HorizontalAlignment="Left" 
-            Margin="8" 
-            ToolTip="Configuración" 
-            Grid.Column="0">
-                                <materialDesign:PackIcon Kind="Settings" />
-                            </Button>
+                                    <StackPanel Grid.Column="0" 
+                        Orientation="Horizontal" 
+                        Margin="15,0">
+                                        <Border Width="32" Height="32" 
+                        CornerRadius="16" 
+                        Background="#2c3e50">
+                                            <materialDesign:PackIcon Kind="Store" 
+                                           Width="20" Height="20"
+                                           Foreground="White"
+                                           VerticalAlignment="Center"
+                                           HorizontalAlignment="Center"/>
+                                        </Border>
+                                        <StackPanel Margin="10,0,0,0" 
+                           VerticalAlignment="Center">
+                                            <TextBlock Text="Veterinaria Mariana" 
+                             Foreground="White" 
+                             FontSize="13"/>
+                                            <TextBlock Text="v2.0.1" 
+                             Foreground="#CCFFFFFF" 
+                             FontSize="11"/>
+                                        </StackPanel>
+                                    </StackPanel>
 
-                            <TextBlock Text="Veterinaria Mariana" 
-               HorizontalAlignment="Center" 
-               VerticalAlignment="Center" 
-               Grid.Column="1" 
-               FontSize="14" 
-               Foreground="White" />
-
-                            <Button Style="{StaticResource MaterialDesignIconButton}" 
-            HorizontalAlignment="Right" 
-            Margin="8" 
-            ToolTip="Cerrar sesión" 
-            Grid.Column="2">
-                                <materialDesign:PackIcon Kind="Logout" />
-                            </Button>
-                        </Grid>
-                    </Grid>
-                    
+                                    <Button Grid.Column="1"
+                    Style="{StaticResource MaterialDesignIconFlatButton}"
+                    Foreground="White"
+                    Width="40" Height="40"
+                    Padding="8"
+                    Margin="5"
+                    ToolTip="Cerrar Sesión">
+                                        <materialDesign:PackIcon Kind="Logout" 
+                                       Width="20" Height="20"/>
+                                    </Button>
+                                </Grid>
+                            </Grid>
+                            
                 </materialDesign:DrawerHost.LeftDrawerContent>
 
                 <!-- Marco de contenido principal -->

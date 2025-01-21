@@ -1,53 +1,58 @@
-﻿using System.Windows.Input;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using System.Windows;
-using VeterinaryManagementSystem.Commands;
+using System.Windows.Input;
 using VeterinaryManagementSystem.Models;
 using VeterinaryManagementSystem.Services;
-using VeterinaryManagementSystem.ViewModels;
 using VeterinaryManagementSystem.Views;
-using VeterinaryManagementSystem;
 
-public class MainViewModel : BaseViewModel
+namespace VeterinaryManagementSystem.ViewModels
 {
-    private readonly IAuthenticationService _authService;
-    private User _currentUser;
-    private ICommand _logoutCommand;
-
-    public User CurrentUser
+    public class MainViewModel : ObservableObject
     {
-        get => _currentUser;
-        set => SetProperty(ref _currentUser, value);
-    }
+        private readonly IAuthenticationService _authService;
+        private readonly INavigationService _navigationService;
+        private User _currentUser;
 
-    public ICommand LogoutCommand => _logoutCommand ??= new RelayCommand(ExecuteLogout);
-
-    public MainViewModel(IAuthenticationService authService)
-    {
-        _authService = authService;
-        // Aquí podrías inicializar datos necesarios
-    }
-
-    private void ExecuteLogout(object parameter)
-    {
-        var result = MessageBox.Show("¿Está seguro que desea cerrar sesión?",
-                                       "Cerrar Sesión",
-                                       MessageBoxButton.YesNo,
-                                       MessageBoxImage.Question);
-
-        if (result == MessageBoxResult.Yes)
+        public User CurrentUser
         {
-            // Crear LoginViewModel con el servicio de autenticación
-            var loginViewModel = new LoginViewModel(_authService);
-            var loginWindow = new LoginWindow(loginViewModel);
-            loginWindow.Show();
+            get => _currentUser;
+            set => SetProperty(ref _currentUser, value);
+        }
 
-            // Cerrar MainWindow
-            foreach (Window window in Application.Current.Windows)
+        public ICommand LogoutCommand { get; }
+
+        public MainViewModel(IAuthenticationService authService, INavigationService navigationService)
+        {
+            _authService = authService;
+            _navigationService = navigationService;
+
+            // Inicializamos el comando de logout
+            LogoutCommand = new RelayCommand(ExecuteLogout);
+        }
+
+        private void ExecuteLogout()
+        {
+            var result = MessageBox.Show("¿Está seguro que desea cerrar sesión?",
+                                         "Cerrar Sesión",
+                                         MessageBoxButton.YesNo,
+                                         MessageBoxImage.Question);
+
+            if (result == MessageBoxResult.Yes)
             {
-                if (window is MainWindow)
+                // Crear LoginViewModel con el servicio de autenticación y navegación
+                var loginViewModel = new LoginViewModel(_authService, _navigationService);
+                var loginWindow = new LoginWindow(loginViewModel); // Pasando LoginViewModel al constructor
+                loginWindow.Show();
+
+                // Cerrar MainWindow
+                foreach (Window window in Application.Current.Windows)
                 {
-                    window.Close();
-                    break;
+                    if (window is MainWindow)
+                    {
+                        window.Close();
+                        break;
+                    }
                 }
             }
         }

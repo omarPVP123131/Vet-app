@@ -1,11 +1,8 @@
-﻿using System.Threading.Tasks;
-using System.Windows.Input;
-using System.Windows;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using VeterinaryManagementSystem.Services;
-using VeterinaryManagementSystem.Commands;
-using VeterinaryManagementSystem.Views;
 using VeterinaryManagementSystem.Models;
-using System.Windows.Navigation;
+using System.Threading.Tasks;
 
 namespace VeterinaryManagementSystem.ViewModels
 {
@@ -18,14 +15,14 @@ namespace VeterinaryManagementSystem.ViewModels
         private string _errorMessage;
         private bool _isLoading;
         private User _currentUser;
-        private ICommand _loginCommand;
-
+        private RelayCommand _loginCommand;  // Declara la variable _loginCommand
 
         public LoginViewModel(IAuthenticationService authService, INavigationService navigationService)
         {
             _authService = authService;
             _navigationService = navigationService;
         }
+
         public bool IsAuthenticated => _currentUser != null;
 
         public User CurrentUser
@@ -43,8 +40,10 @@ namespace VeterinaryManagementSystem.ViewModels
             get => _name;
             set
             {
-                SetProperty(ref _name, value);
-                (LoginCommand as RelayCommand)?.RaiseCanExecuteChanged();
+                if (SetProperty(ref _name, value))
+                {
+                    LoginCommand.NotifyCanExecuteChanged(); // Llamar después de cambiar la propiedad
+                }
             }
         }
 
@@ -53,10 +52,13 @@ namespace VeterinaryManagementSystem.ViewModels
             get => _password;
             set
             {
-                SetProperty(ref _password, value);
-                (LoginCommand as RelayCommand)?.RaiseCanExecuteChanged();
+                if (SetProperty(ref _password, value))
+                {
+                    LoginCommand.NotifyCanExecuteChanged(); // Llamar después de cambiar la propiedad
+                }
             }
         }
+
 
         public string ErrorMessage
         {
@@ -70,15 +72,10 @@ namespace VeterinaryManagementSystem.ViewModels
             set => SetProperty(ref _isLoading, value);
         }
 
-        public ICommand LoginCommand => _loginCommand ??= new RelayCommand(
-            async param => await LoginAsync(),
-            param => CanLogin()
+        public RelayCommand LoginCommand => _loginCommand ??= new RelayCommand(
+            async () => await LoginAsync(),
+            () => CanLogin()
         );
-
-        public LoginViewModel(IAuthenticationService authService)
-        {
-            _authService = authService;
-        }
 
         private bool CanLogin()
         {

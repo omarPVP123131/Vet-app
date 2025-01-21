@@ -1,19 +1,35 @@
 ﻿<Application x:Class="VeterinaryManagementSystem.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+xmlns:local="clr-namespace:VeterinaryManagementSystem.Converters"
+>
+
     <Application.Resources>
+
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <!-- Diccionarios de recursos actualizados -->
+
+                <!-- HandyControl debe ir antes para evitar conflictos -->
+                <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/SkinDefault.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/Theme.xaml"/>
+
+                <!-- Material Design recursos básicos -->
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesign2.Defaults.xaml" />
+
+                <!-- Material Design colores -->
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.Blue.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Secondary/MaterialDesignColor.Indigo.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Button.xaml"/>
-                <materialDesign:BundledTheme BaseTheme="Light" PrimaryColor="DeepPurple" SecondaryColor="Lime"/>
-                <ResourceDictionary>
 
+                <!-- Material Design botones -->
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Button.xaml"/>
+
+                <!-- Configuración del tema BundledTheme -->
+                <materialDesign:BundledTheme BaseTheme="Light" PrimaryColor="DeepPurple" SecondaryColor="Lime"/>
+
+                <!-- Estilos personalizados -->
+                <ResourceDictionary>
                     <Style x:Key="MaterialDesignIconFlatButton" TargetType="Button" BasedOn="{StaticResource MaterialDesignFlatButton}">
                         <Setter Property="Background" Value="Transparent"/>
                         <Setter Property="BorderThickness" Value="0"/>
@@ -24,8 +40,58 @@
                         <Setter Property="Height" Value="40"/>
                     </Style>
 
+                    <Style x:Key="DangerButton" TargetType="Button">
+                        <Setter Property="Background" Value="Red" />
+                        <Setter Property="Foreground" Value="White" />
+                        <Setter Property="FontWeight" Value="Bold" />
+                        <Setter Property="Padding" Value="10,5" />
+                        <Setter Property="Margin" Value="5" />
+                    </Style>
+                    <Style x:Key="PrimaryButton" TargetType="Button">
+                        <Setter Property="Background" Value="#007BFF"/>
+                        <Setter Property="Foreground" Value="White"/>
+                        <Setter Property="Padding" Value="15,8"/>
+                        <Setter Property="BorderThickness" Value="0"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="Button">
+                                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="4">
+                                        <ContentPresenter HorizontalAlignment="Center" 
+                                        VerticalAlignment="Center"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#0056B3"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Background" Value="#CCE5FF"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+
+                    <Style x:Key="SecondaryButton" TargetType="Button">
+                        <Setter Property="Background" Value="#6C757D"/>
+                        <Setter Property="Foreground" Value="White"/>
+                        <Setter Property="Padding" Value="15,8"/>
+                        <Setter Property="BorderThickness" Value="0"/>
+                        <!-- Similar template as PrimaryButton -->
+                    </Style>
+  
+                    <local:StringToVisibilityConverter x:Key="StringToVisibilityConverter" />
+
                 </ResourceDictionary>
+
+
             </ResourceDictionary.MergedDictionaries>
+            <!-- BoolToStringConverter -->
+            <local:BoolToStringConverter x:Key="BoolToStringConverter"/>
+
         </ResourceDictionary>
     </Application.Resources>
 </Application>

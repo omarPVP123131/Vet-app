@@ -1,17 +1,18 @@
 ﻿using System.Data.SQLite;
 using System.Threading.Tasks;
 using VeterinaryManagementSystem.Models;
+using VeterinaryManagementSystem.Helpers;
 
 namespace VeterinaryManagementSystem.Services
 {
     public class AuthenticationService : IAuthenticationService
     {
-        private readonly string _dbPath;
+        private readonly string _connectionString;
         private User _currentUser;
 
-        public AuthenticationService(string dbPath)
+        public AuthenticationService(string connectionString)
         {
-            _dbPath = dbPath;
+            _connectionString = connectionString;
         }
 
         public bool IsAuthenticated => _currentUser != null;
@@ -27,7 +28,7 @@ namespace VeterinaryManagementSystem.Services
                 return (false, "Por favor ingrese nombre y contraseña", null);
 
             // Comprobar las credenciales contra la base de datos SQLite
-            using (var connection = new SQLiteConnection($"Data Source={_dbPath};Version=3;"))
+            using (var connection = new SQLiteConnection(_connectionString))  // Corregido aquí
             {
                 connection.Open();
                 var command = connection.CreateCommand();

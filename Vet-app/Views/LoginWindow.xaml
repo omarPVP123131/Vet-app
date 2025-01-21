@@ -144,32 +144,34 @@
                                Foreground="{DynamicResource MaterialDesignBodyLight}"
                                Margin="0,0,0,40"/>
 
-                    <TextBox x:Name="NameTextBox"
-                             Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
-                             Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                             materialDesign:HintAssist.Hint="Nombre De Usuario"
-                             materialDesign:TextFieldAssist.HasClearButton="True"
-                             Height="56"
-                             Margin="0,0,0,20">
-                        <TextBox.InputBindings>
-                            <KeyBinding Key="Return" 
-                                        Command="{Binding LoginCommand}"
-                                        CommandParameter="{Binding ElementName=PasswordBox, Path=Password}"/>
-                        </TextBox.InputBindings>
-                    </TextBox>
+                        <TextBox x:Name="NameTextBox"
+             Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+             Style="{StaticResource MaterialDesignOutlinedTextBox}"
+             materialDesign:HintAssist.Hint="Nombre De Usuario"
+             materialDesign:TextFieldAssist.HasClearButton="True"
+             Height="56"
+             Margin="0,0,0,20">
+                            <TextBox.InputBindings>
+                                <KeyBinding Key="Return" 
+                        Command="{Binding LoginCommand}"
+                        CommandParameter="{Binding ElementName=PasswordBox, Path=Password}"/>
+                            </TextBox.InputBindings>
+                        </TextBox>
 
-                    <PasswordBox x:Name="PasswordBox"
-                                 Style="{StaticResource MaterialDesignOutlinedPasswordBox}"
-                                 helpers:PasswordBoxHelper.BoundPassword="{Binding Password, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                                 materialDesign:HintAssist.Hint="Contraseña"
-                                 Height="56"
-                                 Margin="0,0,0,30">
-                        <PasswordBox.InputBindings>
-                            <KeyBinding Key="Return"
-                                        Command="{Binding LoginCommand}"
-                                        CommandParameter="{Binding ElementName=PasswordBox, Path=Password}"/>
-                        </PasswordBox.InputBindings>
-                    </PasswordBox>
+
+                        <PasswordBox x:Name="PasswordBox"
+                 Style="{StaticResource MaterialDesignOutlinedPasswordBox}"
+                 helpers:PasswordBoxHelper.BoundPassword="{Binding Password, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                 materialDesign:HintAssist.Hint="Contraseña"
+                 Height="56"
+                 Margin="0,0,0,30">
+                            <PasswordBox.InputBindings>
+                                <KeyBinding Key="Return"
+                        Command="{Binding LoginCommand}"
+                        CommandParameter="{Binding ElementName=PasswordBox, Path=Password}"/>
+                            </PasswordBox.InputBindings>
+                        </PasswordBox>
+
 
                     <!-- Botón de login mejorado -->
                     <Button Content="INICIAR SESIÓN"

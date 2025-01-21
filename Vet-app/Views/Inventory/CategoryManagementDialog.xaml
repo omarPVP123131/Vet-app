@@ -1,0 +1,91 @@
+﻿<Window x:Class="VeterinaryManagementSystem.Views.Inventory.CategoryManagementDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+        Title="Manage Categories"
+        Width="500"
+        Height="400"
+        WindowStartupLocation="CenterOwner"
+        Style="{StaticResource MaterialDesignWindow}">
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Add Category Section -->
+        <Grid Grid.Row="0" Margin="0,0,0,20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBox x:Name="NewCategoryTextBox"
+                     Grid.Column="0"
+                     Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                     md:HintAssist.Hint="New category name"
+                     Margin="0,0,10,0"/>
+
+            <Button Grid.Column="1"
+                    Click="AddCategory_Click"
+                    Style="{StaticResource MaterialDesignRaisedButton}">
+                <StackPanel Orientation="Horizontal">
+                    <md:PackIcon Kind="Plus" Margin="0,0,8,0"/>
+                    <TextBlock Text="Add"/>
+                </StackPanel>
+            </Button>
+        </Grid>
+
+        <!-- Categories List -->
+        <ListView Grid.Row="1" 
+                  x:Name="CategoriesList"
+                  Style="{StaticResource MaterialDesignListView}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Text="{Binding Name}"
+                                 VerticalAlignment="Center"/>
+
+                        <StackPanel Grid.Column="1" 
+                                  Orientation="Horizontal">
+                            <Button Style="{StaticResource MaterialDesignIconButton}"
+                                    Click="EditCategory_Click"
+                                    Tag="{Binding}"
+                                    ToolTip="Edit category">
+                                <md:PackIcon Kind="Edit"/>
+                            </Button>
+                            <Button Style="{StaticResource MaterialDesignIconButton}"
+                                    Click="DeleteCategory_Click"
+                                    Tag="{Binding}"
+        ToolTip="Delete category">
+                                <md:PackIcon Kind="Delete"/>
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <!-- Dialog Buttons -->
+        <StackPanel Grid.Row="2" 
+                    Orientation="Horizontal" 
+                    HorizontalAlignment="Right" 
+                    Margin="0,20,0,0">
+            <Button Click="Close_Click"
+                    Style="{StaticResource MaterialDesignOutlinedButton}"
+                    Margin="0,0,8,0">
+                <StackPanel Orientation="Horizontal">
+                    <md:PackIcon Kind="Close" Margin="0,0,8,0"/>
+                    <TextBlock Text="Close"/>
+                </StackPanel>
+            </Button>
+        </StackPanel>
+    </Grid>
+</Window>

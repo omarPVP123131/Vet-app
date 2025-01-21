@@ -2,10 +2,15 @@
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
-using System.Windows.Media.Imaging;
-using VeterinaryManagementSystem.Views;
-using VeterinaryManagementSystem.ViewModels;
 using VeterinaryManagementSystem.Services;
+using VeterinaryManagementSystem.Views;
+using System.Windows.Navigation;
+using System.Collections.Generic;
+using VeterinaryManagementSystem.ViewModels;
+using VeterinaryManagementSystem.Views.Inventory;
+using VeterinaryManagementSystem.Helpers;
+using VeterinaryManagementSystem.Config;
+using VeterinaryManagementSystem.Views.Proveedores;
 
 namespace VeterinaryManagementSystem
 {
@@ -13,55 +18,53 @@ namespace VeterinaryManagementSystem
     {
         private bool isMenuExpanded = true;
         private readonly MainViewModel _viewModel;
+        private DatabaseHelper _dbHelper;
 
-        public MainWindow(IAuthenticationService authService)
+
+        public MainWindow(IAuthenticationService authService, INavigationService navigationService)
         {
             InitializeComponent();
-            _viewModel = new MainViewModel(authService);
+            _viewModel = new MainViewModel(authService, navigationService);
             DataContext = _viewModel;
+            _dbHelper = new DatabaseHelper(DatabaseConfig.ConnectionString);
+
             // Llamada para navegar al Dashboard después de la inicialización
             NavigateToDashboard(null, null);
-        
         }
 
         private void NavigateToDashboard(object sender, RoutedEventArgs e)
         {
             MainFrame.Navigate(new DashboardPage());
         }
+
+        private void NavigateToPointOfSale(object sender, RoutedEventArgs e)
+        {
+            // Navega a la página de Punto de Venta
+            MainFrame.Navigate(new PointOfSalePage());
+        }
+
+      
         private void NavigateToConfig(object sender, RoutedEventArgs e)
         {
             MainFrame.Navigate(new SettingsWindow());
         }
 
-        private void NavigateToPatients(object sender, RoutedEventArgs e)
-        {
-            MainFrame.Navigate(new PatientsPage());
-        }
-
-        private void NavigateToAppointments(object sender, RoutedEventArgs e)
-        {
-            MainFrame.Navigate(new AppointmentsPage());
-        }
-
         private void NavigateToInventory(object sender, RoutedEventArgs e)
         {
-            MainFrame.Navigate(new InventoryPage());
+            MainFrame.Navigate(new InventoryPage(_dbHelper));
         }
 
-        private void NavigateToMedicalRecords(object sender, RoutedEventArgs e)
+        private void NavigateToProviders(object sender, RoutedEventArgs e)
         {
-            MainFrame.Navigate(new MedicalRecordsPage());
+            MainFrame.Navigate(new SupplierView(_dbHelper));
         }
 
-        private void NavigateToBilling(object sender, RoutedEventArgs e)
+
+        private void NavigateToClients(object sender, RoutedEventArgs e)
         {
-            MainFrame.Navigate(new BillingPage());
+            MainFrame.Navigate(new SupplierView(_dbHelper));
         }
 
-        private void NavigateToVaccination(object sender, RoutedEventArgs e)
-        {
-            MainFrame.Navigate(new VaccinationPage());
-        }
 
         private void NavigateToCommunication(object sender, RoutedEventArgs e)
         {
@@ -73,6 +76,41 @@ namespace VeterinaryManagementSystem
             this.Close();
         }
 
+        //Método para actualizar el botón activo
+        //private void UpdateActiveButton(Button clickedButton)
+        //{
+        //    foreach (var button in FindVisualChildren<Button>(this))
+        //    {
+        //        if (button.Style == FindResource("ModernMenuButton"))
+        //        {
+        //            button.Background = Brushes.Transparent;
+        //            button.Foreground = Brushes.Black;
+        //        }
+        //    }
+
+        //    if (clickedButton != null)
+        //    {
+        //        clickedButton.Background = new SolidColorBrush(Color.FromRgb(74, 144, 226));
+        //        clickedButton.Foreground = Brushes.White;
+        //    }
+        //}
+
+        private static IEnumerable<T> FindVisualChildren<T>(DependencyObject depObj) where T : DependencyObject
+        {
+            if (depObj == null) yield break;
+
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(depObj); i++)
+            {
+                var child = VisualTreeHelper.GetChild(depObj, i);
+
+                if (child != null && child is T)
+                    yield return (T)child;
+
+                foreach (T childOfChild in FindVisualChildren<T>(child))
+                    yield return childOfChild;
+            }
+        }
+
         private void SeeAllNotifications_Click(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("Ver todas las notificaciones: Esta funcionalidad se implementará próximamente.",
@@ -80,38 +118,16 @@ namespace VeterinaryManagementSystem
                             MessageBoxButton.OK,
                             MessageBoxImage.Information);
         }
+
         private void ToggleMenu_Click(object sender, RoutedEventArgs e)
         {
             var menuStoryboard = (Storyboard)FindResource(isMenuExpanded ? "MenuClose" : "MenuOpen");
             menuStoryboard.Begin(SideMenu);
             isMenuExpanded = !isMenuExpanded;
 
-            // Ocultar/Mostrar textos del menú
-            var textBlocks = FindVisualChildren<TextBlock>(SideMenu);
-            foreach (var textBlock in textBlocks)
+            foreach (var textBlock in FindVisualChildren<TextBlock>(SideMenu))
             {
                 textBlock.Visibility = isMenuExpanded ? Visibility.Visible : Visibility.Collapsed;
-            }
-        }
-
-        // Helper method to find all children of a specific type
-        private static IEnumerable<T> FindVisualChildren<T>(DependencyObject depObj) where T : DependencyObject
-        {
-            if (depObj != null)
-            {
-                for (int i = 0; i < VisualTreeHelper.GetChildrenCount(depObj); i++)
-                {
-                    DependencyObject child = VisualTreeHelper.GetChild(depObj, i);
-                    if (child != null && child is T)
-                    {
-                        yield return (T)child;
-                    }
-
-                    foreach (T childOfChild in FindVisualChildren<T>(child))
-                    {
-                        yield return childOfChild;
-                    }
-                }
             }
         }
 
@@ -127,14 +143,7 @@ namespace VeterinaryManagementSystem
 
         private void MaximizeWindow_Click(object sender, RoutedEventArgs e)
         {
-            if (this.WindowState == WindowState.Normal)
-            {
-                this.WindowState = WindowState.Maximized;
-            }
-            else
-            {
-                this.WindowState = WindowState.Normal;
-            }
+            WindowState = (WindowState == WindowState.Normal) ? WindowState.Maximized : WindowState.Normal;
         }
     }
 }
