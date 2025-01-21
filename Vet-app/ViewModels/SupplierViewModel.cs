@@ -8,25 +8,29 @@ using VeterinaryManagementSystem.Models;
 using CommunityToolkit.Mvvm.Input;
 using VeterinaryManagementSystem.Views.Proveedores;
 using System.Windows;
-using VeterinaryManagementSystem.ViewModels;  // Asegúrate de que esté apuntando al espacio de nombres correcto
+using VeterinaryManagementSystem.ViewModels;
+using VeterinaryManagementSystem.Services;
 
 namespace VeterinaryManagementSystem.ViewModels
 {
     public class SuppliersViewModel : INotifyPropertyChanged
     {
         private readonly DatabaseHelper _databaseHelper;
+        private readonly DialogService _dialogService;
+        private readonly AnimationService _animationService;
 
         public SuppliersViewModel(DatabaseHelper databaseHelper)
         {
             _databaseHelper = databaseHelper;
+            _animationService = new AnimationService();
+            _dialogService = new DialogService(_animationService);
             LoadSuppliers();
 
-            // Comandos
+            // Initialize commands
             SearchCommand = new RelayCommand(SearchSuppliers);
             AddSupplierCommand = new RelayCommand(AddSupplier);
-            UpdateSupplierCommand = new RelayCommand(UpdateSupplier, () => CanEditOrDelete);
-            DeleteSupplierCommand = new RelayCommand(DeleteSupplier, () => CanEditOrDelete);
-
+            UpdateSupplierCommand = new RelayCommand(UpdateSupplier, () => SelectedSupplier != null);
+            DeleteSupplierCommand = new RelayCommand(DeleteSupplier, () => SelectedSupplier != null);
         }
 
         #region Properties
@@ -39,13 +43,20 @@ namespace VeterinaryManagementSystem.ViewModels
             get => _selectedSupplier;
             set
             {
-                _selectedSupplier = value;
-                OnPropertyChanged(nameof(SelectedSupplier));
-                OnPropertyChanged(nameof(CanEditOrDelete));
+                if (_selectedSupplier != value)
+                {
+                    _selectedSupplier = value;
+                    OnPropertyChanged(nameof(SelectedSupplier));
+                    OnPropertyChanged(nameof(CanEditOrDelete));
+                    (UpdateSupplierCommand as RelayCommand)?.NotifyCanExecuteChanged();
+                    (DeleteSupplierCommand as RelayCommand)?.NotifyCanExecuteChanged();
+                }
             }
         }
 
         public string SearchText { get; set; }
+
+        public bool CanEditOrDelete => SelectedSupplier != null;
 
         #endregion
 
@@ -55,8 +66,6 @@ namespace VeterinaryManagementSystem.ViewModels
         public ICommand AddSupplierCommand { get; }
         public ICommand UpdateSupplierCommand { get; }
         public ICommand DeleteSupplierCommand { get; }
-
-        public bool CanEditOrDelete => SelectedSupplier != null;
 
         #endregion
 
@@ -73,9 +82,17 @@ namespace VeterinaryManagementSystem.ViewModels
 
         private void SearchSuppliers()
         {
+            if (string.IsNullOrWhiteSpace(SearchText))
+            {
+                LoadSuppliers();
+                return;
+            }
+
             Suppliers.Clear();
             foreach (var supplier in _databaseHelper.GetSuppliers().Where(s =>
-                s.CompanyName.Contains(SearchText, StringComparison.OrdinalIgnoreCase)))
+                s.CompanyName.Contains(SearchText, StringComparison.OrdinalIgnoreCase) ||
+                s.ContactName.Contains(SearchText, StringComparison.OrdinalIgnoreCase) ||
+                s.Email.Contains(SearchText, StringComparison.OrdinalIgnoreCase)))
             {
                 Suppliers.Add(supplier);
             }
@@ -110,7 +127,7 @@ namespace VeterinaryManagementSystem.ViewModels
 
         private void OpenEditor(Supplier supplier, string title, Action<Supplier> onSave)
         {
-            var editorViewModel = new SupplierEditorViewModel(supplier, title, onSave);
+            var editorViewModel = new SupplierEditorViewModel(supplier, title, onSave, _dialogService, _animationService);
             var editorView = new SupplierEditorView
             {
                 DataContext = editorViewModel,
@@ -120,13 +137,13 @@ namespace VeterinaryManagementSystem.ViewModels
             editorView.ShowDialog();
         }
 
-
         private void DeleteSupplier()
         {
             if (SelectedSupplier != null)
             {
                 _databaseHelper.DeleteSupplier(SelectedSupplier.Id);
                 Suppliers.Remove(SelectedSupplier);
+                SelectedSupplier = null;
             }
         }
 

@@ -8,13 +8,13 @@ namespace VeterinaryManagementSystem.Views.Proveedores
 {
     public partial class SupplierView : Page
     {
-        private SuppliersViewModel _viewModel;
+        public SuppliersViewModel ViewModel { get; private set; }
 
         public SupplierView(DatabaseHelper databaseHelper)
         {
             InitializeComponent();
-            _viewModel = new SuppliersViewModel(databaseHelper);
-            DataContext = _viewModel;
+            ViewModel = new SuppliersViewModel(databaseHelper);
+            this.DataContext = ViewModel;
         }
     }
 }

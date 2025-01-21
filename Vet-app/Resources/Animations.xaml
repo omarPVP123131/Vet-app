@@ -1,0 +1,72 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- Window Animations -->
+    <Storyboard x:Key="WindowFadeIn">
+        <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                        From="0" To="1" Duration="0:0:0.2"/>
+        <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)"
+                        From="30" To="0" Duration="0:0:0.3">
+            <DoubleAnimation.EasingFunction>
+                <CubicEase EasingMode="EaseOut"/>
+            </DoubleAnimation.EasingFunction>
+        </DoubleAnimation>
+    </Storyboard>
+
+    <!-- Form Animations -->
+    <Storyboard x:Key="FormFieldsAnimation">
+        <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                        From="0" To="1" Duration="0:0:0.5"/>
+        <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)"
+                        From="20" To="0" Duration="0:0:0.5">
+            <DoubleAnimation.EasingFunction>
+                <CubicEase EasingMode="EaseOut"/>
+            </DoubleAnimation.EasingFunction>
+        </DoubleAnimation>
+    </Storyboard>
+
+    <!-- Dialog Animations -->
+    <Storyboard x:Key="ConfirmationDialogAnimation">
+        <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)" Duration="0:0:0.3">
+            <EasingDoubleKeyFrame KeyTime="0:0:0" Value="0.8"/>
+            <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="1">
+                <EasingDoubleKeyFrame.EasingFunction>
+                    <BackEase EasingMode="EaseOut" Amplitude="0.5"/>
+                </EasingDoubleKeyFrame.EasingFunction>
+            </EasingDoubleKeyFrame>
+        </DoubleAnimationUsingKeyFrames>
+        <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)" Duration="0:0:0.3">
+            <EasingDoubleKeyFrame KeyTime="0:0:0" Value="0.8"/>
+            <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="1">
+                <EasingDoubleKeyFrame.EasingFunction>
+                    <BackEase EasingMode="EaseOut" Amplitude="0.5"/>
+                </EasingDoubleKeyFrame.EasingFunction>
+            </EasingDoubleKeyFrame>
+        </DoubleAnimationUsingKeyFrames>
+        <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                        From="0" To="1" Duration="0:0:0.3"/>
+    </Storyboard>
+
+    <Storyboard x:Key="ConfirmationDialogFadeOut">
+        <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                        From="1" To="0" Duration="0:0:0.2"/>
+    </Storyboard>
+
+    <!-- Notification Animations -->
+    <Storyboard x:Key="NotificationAnimation">
+        <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                        From="0" To="1" Duration="0:0:0.3"/>
+        <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)"
+                        From="-20" To="0" Duration="0:0:0.3">
+            <DoubleAnimation.EasingFunction>
+                <CubicEase EasingMode="EaseOut"/>
+            </DoubleAnimation.EasingFunction>
+        </DoubleAnimation>
+    </Storyboard>
+
+    <Storyboard x:Key="NotificationFadeOut">
+        <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                        From="1" To="0" Duration="0:0:0.2"/>
+    </Storyboard>
+</ResourceDictionary>
+

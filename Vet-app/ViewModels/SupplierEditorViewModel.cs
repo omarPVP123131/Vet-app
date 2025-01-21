@@ -2,8 +2,11 @@
 using System.Text.RegularExpressions;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
-using System
-    .Windows;
+using System.Windows;
+using GalaSoft.MvvmLight.Views;
+using VeterinaryManagementSystem.Services;
+using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 
 public class SupplierEditorViewModel : INotifyPropertyChanged, IDataErrorInfo
 {
@@ -15,6 +18,17 @@ public class SupplierEditorViewModel : INotifyPropertyChanged, IDataErrorInfo
     public ICommand SaveCommand { get; }
     public ICommand CancelCommand { get; }
     private readonly Action<Supplier> _onSave;
+
+    private readonly DialogService _dialogService;
+    private readonly AnimationService _animationService;
+
+    public bool ShowConfirmDialog { get; set; }
+    public string ConfirmationTitle { get; set; }
+    public string ConfirmationMessage { get; set; }
+    public bool ShowSuccessNotification { get; set; }
+    public string SuccessMessage { get; set; }
+    public ICommand ConfirmActionCommand { get; }
+    public ICommand CancelConfirmationCommand { get; }
 
     public string ErrorMessage
     {
@@ -85,8 +99,11 @@ public class SupplierEditorViewModel : INotifyPropertyChanged, IDataErrorInfo
         }
     }
 
-    public SupplierEditorViewModel(Supplier supplier, string title, Action<Supplier> onSave)
+    public SupplierEditorViewModel(Supplier supplier, string title, Action<Supplier> onSave, DialogService dialogService, AnimationService animationService)
     {
+        _dialogService = dialogService;
+        _animationService = animationService;
+
         Supplier = supplier ?? new Supplier();
         Title = title;
         _onSave = onSave;
@@ -106,13 +123,28 @@ public class SupplierEditorViewModel : INotifyPropertyChanged, IDataErrorInfo
         try
         {
             _onSave?.Invoke(Supplier);
-            CloseWindow();
+
+            // Crear un Popup
+            Popup notificationPopup = new Popup();
+            // Aquí puedes personalizar el contenido del Popup, como agregar un texto o controles adicionales
+            TextBlock textBlock = new TextBlock { Text = SuccessMessage ?? "Proveedor guardado exitosamente" };
+            notificationPopup.Child = textBlock;
+
+            // Mostrar la notificación usando el servicio
+            _dialogService.ShowNotification(notificationPopup, "Éxito");
+
+            // Cerrar la ventana después de un retraso
+            Task.Delay(1500).ContinueWith(t =>
+            {
+                Application.Current.Dispatcher.Invoke(() => CloseWindow());
+            });
         }
         catch (Exception ex)
         {
             ErrorMessage = $"Error al guardar: {ex.Message}";
         }
     }
+
 
     private void Cancel() => CloseWindow();
 

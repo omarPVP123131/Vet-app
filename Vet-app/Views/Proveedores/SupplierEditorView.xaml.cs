@@ -1,7 +1,4 @@
-﻿using System;
-using System.Windows;
-using VeterinaryManagementSystem.Models;
-using VeterinaryManagementSystem.ViewModels;
+﻿using System.Windows;
 
 namespace VeterinaryManagementSystem.Views.Proveedores
 {

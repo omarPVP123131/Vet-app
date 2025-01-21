@@ -1,162 +1,381 @@
-﻿<Page x:Class="VeterinaryManagementSystem.Views.Proveedores.SupplierEditorView"
-      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="VeterinaryManagementSystem.Views.Proveedores.SupplierEditorView"
-      xmlns:converters="clr-namespace:VeterinaryManagementSystem.Converters"      Title="Gestión de Proveedores"
-      Background="White">
+﻿<Window x:Class="VeterinaryManagementSystem.Views.Proveedores.SupplierEditorView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="{Binding Title}"
+        Height="600" 
+        Width="500" 
+        WindowStartupLocation="CenterOwner"
+        Background="Transparent"
+        AllowsTransparency="True"
+        WindowStyle="None">
 
-    <Grid Margin="20">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
+    <Window.Resources>
+        <!-- Animations -->
+        <Storyboard x:Key="WindowFadeIn">
+            <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                           From="0" To="1" Duration="0:0:0.2"/>
+            <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)"
+                           From="30" To="0" Duration="0:0:0.3">
+                <DoubleAnimation.EasingFunction>
+                    <CubicEase EasingMode="EaseOut"/>
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+        </Storyboard>
 
-        <!-- Título -->
-        <TextBlock Text="Gestión de Proveedores"
-                   FontSize="24"
-                   FontWeight="SemiBold"
-                   Margin="0,0,0,20"
-                   Foreground="#333333"/>
+        <Storyboard x:Key="FormFieldsAnimation">
+            <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                             From="0" To="1" Duration="0:0:0.5"/>
+            <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)"
+                             From="20" To="0" Duration="0:0:0.5">
+                <DoubleAnimation.EasingFunction>
+                    <CubicEase EasingMode="EaseOut"/>
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+        </Storyboard>
 
-        <!-- Barra de Herramientas -->
-        <Grid Grid.Row="1" Margin="0,0,0,20">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
+        <Storyboard x:Key="FooterFadeIn">
+            <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                             From="0" To="1" Duration="0:0:0.3"
+                             BeginTime="0:0:0.5"/>
+        </Storyboard>
 
-            <!-- Búsqueda -->
-            <Border Background="White"
-                    BorderBrush="#DEDEDE"
-                    BorderThickness="1"
-                    CornerRadius="4"
-                    Width="300"
-                    HorizontalAlignment="Left">
-                <Grid>
-                    <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
-                             BorderThickness="0"
-                             Padding="8"
-                             Height="35"
-                             VerticalContentAlignment="Center">
-                        <TextBox.Style>
-                            <Style TargetType="TextBox">
-                                <Style.Triggers>
-                                    <Trigger Property="Text" Value="">
-                                        <Setter Property="Template">
-                                            <Setter.Value>
-                                                <ControlTemplate TargetType="TextBox">
-                                                    <Border Background="{TemplateBinding Background}"
-                                                            BorderBrush="{TemplateBinding BorderBrush}"
-                                                            BorderThickness="{TemplateBinding BorderThickness}">
-                                                        <Grid>
-                                                            <ScrollViewer x:Name="PART_ContentHost"/>
-                                                            <TextBlock Text="Buscar proveedor..."
-                                                                       Foreground="Gray"
-                                                                       Margin="8,0,0,0"
-                                                                       VerticalAlignment="Center"
-                                                                       IsHitTestVisible="False"/>
-                                                        </Grid>
-                                                    </Border>
-                                                </ControlTemplate>
-                                            </Setter.Value>
-                                        </Setter>
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </TextBox.Style>
-                    </TextBox>
-                    <Button Command="{Binding SearchCommand}"
-                            HorizontalAlignment="Right"
-                            Margin="0,0,5,0">
-                        <Path Data="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"
-                              Fill="#666666"
-                              Stretch="Uniform"
-                              Width="16"
-                              Height="16"/>
-                    </Button>
-                </Grid>
-            </Border>
+        <!-- Styles -->
+        <Style x:Key="ModernTextBox" TargetType="TextBox">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#E0E0E0"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="12,8"/>
+            <Setter Property="Height" Value="45"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="6">
+                            <Grid>
+                                <ScrollViewer x:Name="PART_ContentHost" 
+                                            Margin="{TemplateBinding Padding}"/>
+                                <TextBlock Text="{TemplateBinding Tag}"
+                                         Margin="{TemplateBinding Padding}"
+                                         Foreground="#BDBDBD"
+                                         IsHitTestVisible="False">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Text, RelativeSource={RelativeSource Mode=TemplatedParent}}" 
+                                                           Value="">
+                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Text, RelativeSource={RelativeSource Mode=TemplatedParent}}" 
+                                                           Value="{x:Null}">
+                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                </DataTrigger>
+                                                <MultiDataTrigger>
+                                                    <MultiDataTrigger.Conditions>
+                                                        <Condition Binding="{Binding Text, RelativeSource={RelativeSource Mode=TemplatedParent}}" 
+                                                                 Value=""/>
+                                                        <Condition Binding="{Binding IsFocused, RelativeSource={RelativeSource Mode=TemplatedParent}}" 
+                                                                 Value="True"/>
+                                                    </MultiDataTrigger.Conditions>
+                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                </MultiDataTrigger>
+                                            </Style.Triggers>
+                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                            </Grid>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsFocused" Value="True">
+                    <Setter Property="BorderBrush" Value="#2196F3"/>
+                </Trigger>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="BorderBrush" Value="#BDBDBD"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
 
-            <!-- Botones CRUD -->
-            <StackPanel Grid.Column="1" 
-                        Orientation="Horizontal" 
-                        HorizontalAlignment="Right">
-                <Button Content="Agregar Proveedor"
-                        Command="{Binding AddSupplierCommand}"
-                        Style="{StaticResource PrimaryButton}"
-                        Height="35"
-                        Margin="0,0,10,0"/>
-                <Button Content="Editar"
-                        Command="{Binding UpdateSupplierCommand}"
+        <Style x:Key="FieldLabel" TargetType="TextBlock">
+            <Setter Property="Margin" Value="0,0,0,8"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Foreground" Value="#505050"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+        </Style>
+
+        <!-- Dialog Shadow Effect -->
+        <DropShadowEffect x:Key="DialogShadow"
+                         BlurRadius="20"
+                         ShadowDepth="1"
+                         Opacity="0.3"/>
+
+        <!-- Button Styles -->
+        <Style x:Key="TransparentButton" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#1A000000"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Success Notification Style -->
+        <Style x:Key="SuccessNotification" TargetType="Border">
+            <Setter Property="Background" Value="#4CAF50"/>
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="Padding" Value="16,12"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect BlurRadius="10" ShadowDepth="1" Opacity="0.3"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Window.RenderTransform>
+        <TranslateTransform/>
+    </Window.RenderTransform>
+
+    <Window.Triggers>
+        <EventTrigger RoutedEvent="Window.Loaded">
+            <BeginStoryboard Storyboard="{StaticResource WindowFadeIn}"/>
+        </EventTrigger>
+    </Window.Triggers>
+
+    <Border Background="#F5F7FA"
+            CornerRadius="12"
+            Effect="{DynamicResource DialogShadow}">
+        <Grid x:Name="MainGrid" Margin="24">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Header -->
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel>
+                    <TextBlock Text="{Binding Title}"
+                             FontSize="24"
+                             FontWeight="Bold"
+                             Foreground="#1a1a1a"/>
+                    <TextBlock Text="Complete los campos requeridos (*)"
+                             Margin="0,8,0,0"
+                             Foreground="#666666"/>
+                </StackPanel>
+
+                <Button Grid.Column="1"
+                        Command="{Binding CancelCommand}"
+                        Style="{StaticResource TransparentButton}"
+                        Width="32"
+                        Height="32">
+                    <Path Data="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z"
+                          Fill="#666666"
+                          Width="16"
+                          Height="16"/>
+                </Button>
+            </Grid>
+
+            <!-- Form -->
+            <ScrollViewer Grid.Row="1" 
+                         Margin="0,24,0,0" 
+                         VerticalScrollBarVisibility="Auto">
+                <StackPanel>
+                    <StackPanel.RenderTransform>
+                        <TranslateTransform/>
+                    </StackPanel.RenderTransform>
+                    <StackPanel.Triggers>
+                        <EventTrigger RoutedEvent="Loaded">
+                            <BeginStoryboard Storyboard="{StaticResource FormFieldsAnimation}"/>
+                        </EventTrigger>
+                    </StackPanel.Triggers>
+
+                    <!-- Company Name -->
+                    <StackPanel Margin="0,0,0,16">
+                        <TextBlock Text="Nombre de la Empresa *"
+                                 Style="{StaticResource FieldLabel}"/>
+                        <TextBox Text="{Binding Supplier.CompanyName, UpdateSourceTrigger=PropertyChanged}"
+                                Tag="Ingrese el nombre de la empresa"
+                                Style="{StaticResource ModernTextBox}"/>
+                    </StackPanel>
+
+                    <!-- Contact Name -->
+                    <StackPanel Margin="0,0,0,16">
+                        <TextBlock Text="Nombre del Contacto *"
+                                 Style="{StaticResource FieldLabel}"/>
+                        <TextBox Text="{Binding Supplier.ContactName, UpdateSourceTrigger=PropertyChanged}"
+                                Tag="Ingrese el nombre del contacto"
+                                Style="{StaticResource ModernTextBox}"/>
+                    </StackPanel>
+
+                    <!-- Phone -->
+                    <StackPanel Margin="0,0,0,16">
+                        <TextBlock Text="Teléfono *"
+                                 Style="{StaticResource FieldLabel}"/>
+                        <TextBox Text="{Binding Supplier.Phone, UpdateSourceTrigger=PropertyChanged}"
+                                Tag="Ingrese el número de teléfono"
+                                Style="{StaticResource ModernTextBox}"/>
+                    </StackPanel>
+
+                    <!-- Email -->
+                    <StackPanel Margin="0,0,0,16">
+                        <TextBlock Text="Correo Electrónico *"
+                                 Style="{StaticResource FieldLabel}"/>
+                        <TextBox Text="{Binding Supplier.Email, UpdateSourceTrigger=PropertyChanged}"
+                                Tag="Ingrese el correo electrónico"
+                                Style="{StaticResource ModernTextBox}"/>
+                    </StackPanel>
+
+                    <!-- Status -->
+                    <StackPanel Margin="0,0,0,16">
+                        <TextBlock Text="Estado"
+                                 Style="{StaticResource FieldLabel}"/>
+                        <CheckBox Content="Proveedor Activo"
+                                 IsChecked="{Binding Supplier.IsActive}"
+                                 Margin="0,8,0,0"/>
+                    </StackPanel>
+                </StackPanel>
+            </ScrollViewer>
+
+            <!-- Footer with Confirmation -->
+            <Grid Grid.Row="2" Margin="0,24,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <Grid.Triggers>
+                    <EventTrigger RoutedEvent="Loaded">
+                        <BeginStoryboard Storyboard="{StaticResource FooterFadeIn}"/>
+                    </EventTrigger>
+                </Grid.Triggers>
+
+                <!-- Error Message -->
+                <TextBlock Text="{Binding ErrorMessage}"
+                         Foreground="#DC3545"
+                         TextWrapping="Wrap"
+                         Visibility="{Binding HasError, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+
+                <!-- Cancel Button -->
+                <Button Grid.Column="1"
+                        Command="{Binding CancelCommand}"
+                        Content="Cancelar"
                         Style="{StaticResource SecondaryButton}"
-                        Height="35"
-                        Margin="0,0,10,0"
-                        IsEnabled="{Binding CanEditOrDelete}"/>
-                <Button Content="Eliminar"
-                        Command="{Binding DeleteSupplierCommand}"
-                        Style="{StaticResource DangerButton}"
-                        Height="35"
-                        IsEnabled="{Binding CanEditOrDelete}"/>
-            </StackPanel>
+                        Height="45"
+                        Margin="0,0,12,0"/>
+
+                <!-- Save Button -->
+                <Button Grid.Column="2"
+                        Command="{Binding SaveCommand}"
+                        Content="Guardar"
+                        Style="{StaticResource PrimaryButton}"
+                        Height="45"
+                        IsEnabled="{Binding IsValid}"/>
+            </Grid>
+
+            <!-- Confirmation Dialog -->
+            <Grid x:Name="ConfirmationDialog"
+                  Grid.RowSpan="3"
+                  Background="#80000000"
+                  Visibility="{Binding ShowConfirmDialog, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <Border Background="White"
+                        CornerRadius="8"
+                        MaxWidth="400"
+                        Margin="24"
+                        Effect="{StaticResource DialogShadow}">
+                    <Grid Margin="24">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Text="{Binding ConfirmationTitle}"
+                                 FontSize="20"
+                                 FontWeight="SemiBold"
+                                 Margin="0,0,0,16"/>
+
+                        <TextBlock Grid.Row="1"
+                                 Text="{Binding ConfirmationMessage}"
+                                 TextWrapping="Wrap"
+                                 Margin="0,0,0,24"/>
+
+                        <StackPanel Grid.Row="2"
+                                  Orientation="Horizontal"
+                                  HorizontalAlignment="Right">
+                            <Button Content="No"
+                                    Command="{Binding CancelConfirmationCommand}"
+                                    Style="{StaticResource SecondaryButton}"
+                                    Margin="0,0,12,0"/>
+                            <Button Content="Sí"
+                                    Command="{Binding ConfirmActionCommand}"
+                                    Style="{StaticResource PrimaryButton}"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+            </Grid>
+
+            <!-- Success Notification -->
+            <Popup x:Name="SuccessNotification"
+                   Grid.RowSpan="3"
+                   IsOpen="{Binding ShowSuccessNotification}"
+                   PlacementTarget="{Binding ElementName=MainGrid}"
+                   Placement="Center"
+                   AllowsTransparency="True">
+                <Border Style="{StaticResource SuccessNotification}">
+                    <Border.RenderTransform>
+                        <TranslateTransform/>
+                    </Border.RenderTransform>
+                    <Border.Triggers>
+                        <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                                                     From="0" To="1" Duration="0:0:0.3"/>
+                                    <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)"
+                                                     From="-20" To="0" Duration="0:0:0.3">
+                                        <DoubleAnimation.EasingFunction>
+                                            <CubicEase EasingMode="EaseOut"/>
+                                        </DoubleAnimation.EasingFunction>
+                                    </DoubleAnimation>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Border.Triggers>
+                    <StackPanel Orientation="Horizontal">
+                        <Path Data="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"
+                              Width="20"
+                              Height="20"
+                              Margin="0,0,12,0"
+                              Fill="White"/>
+                        <TextBlock Text="{Binding SuccessMessage}"
+                                   Foreground="White"/>
+                    </StackPanel>
+                </Border>
+            </Popup>
         </Grid>
+    </Border>
+</Window>
 
-        <!-- DataGrid -->
-        <DataGrid Grid.Row="2"
-                  ItemsSource="{Binding Suppliers}"
-                  SelectedItem="{Binding SelectedSupplier}"
-                  AutoGenerateColumns="False"
-                  IsReadOnly="True"
-                  BorderThickness="1"
-                  BorderBrush="#DEDEDE"
-                  RowHeight="35"
-                  HeadersVisibility="Column"
-                  GridLinesVisibility="Horizontal"
-                  Background="White"
-                  RowBackground="White"
-                  AlternatingRowBackground="#F8F8F8">
-            <DataGrid.Resources>
-                <Style TargetType="DataGridColumnHeader">
-                    <Setter Property="Background" Value="#F5F5F5"/>
-                    <Setter Property="Padding" Value="8"/>
-                    <Setter Property="FontWeight" Value="SemiBold"/>
-                </Style>
-            </DataGrid.Resources>
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="ID" 
-                                  Binding="{Binding Id}" 
-                                  Width="Auto"/>
-                <DataGridTextColumn Header="Empresa" 
-                                  Binding="{Binding CompanyName}" 
-                                  Width="*"/>
-                <DataGridTextColumn Header="Contacto" 
-                                  Binding="{Binding ContactName}" 
-                                  Width="*"/>
-                <DataGridTextColumn Header="Teléfono" 
-                                  Binding="{Binding Phone}" 
-                                  Width="Auto"/>
-                <DataGridTextColumn Header="Email" 
-                                  Binding="{Binding Email}" 
-                                  Width="*"/>
-                <DataGridTemplateColumn Header="Estado" Width="Auto">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding IsActive, Converter={StaticResource BoolToActiveStatusConverter}}"
-                       Foreground="{Binding IsActive, Converter={StaticResource BoolToStatusColorConverter}}"
-                       FontWeight="Medium"
-                       Margin="8,0"/>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-
-            </DataGrid.Columns>
-        </DataGrid>
-
-        <!-- Estado -->
-        <TextBlock Grid.Row="3"
-                   Text="{Binding StatusMessage}"
-                   Margin="0,10,0,0"
-                   Foreground="Gray"/>
-    </Grid>
-</Page>

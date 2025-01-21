@@ -9,6 +9,7 @@ xmlns:local="clr-namespace:VeterinaryManagementSystem.Converters"
 
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resources/Animations.xaml" />
 
                 <!-- HandyControl debe ir antes para evitar conflictos -->
                 <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/SkinDefault.xaml"/>
